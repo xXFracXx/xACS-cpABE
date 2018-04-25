@@ -13,6 +13,8 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import javax.crypto.Cipher;
+import javax.servlet.http.HttpSession;
+
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 import cn.edu.pku.ss.crypto.abe.serialize.SerializeUtils;
 import cn.edu.pku.ss.crypto.aes.AES;
@@ -21,7 +23,7 @@ public class CPABEImpl {
 	private static Pairing pairing = PairingManager.defaultPairing;
 	public static boolean debug = false;
 	
-	public static void setup(String PKFileName, String MKFileName){
+	public static String[] setup(String PKFileName, String MKFileName){
 		File PKFile = new File(PKFileName);
 		File MKFile = new File(MKFileName);
 		if(!PKFile.exists()){
@@ -58,6 +60,12 @@ public class CPABEImpl {
 		
 		SerializeUtils.serialize(PK, PKFile);
 		SerializeUtils.serialize(MK, MKFile);
+		
+		String[] keypairArr = new String[2];
+		keypairArr[0] = pkey;
+		keypairArr[1] = mkey;
+		
+		return keypairArr;
 	}
 	
 	public static void setup(){
@@ -113,7 +121,7 @@ public class CPABEImpl {
 		return file;
 	}
 	
-	public static void enc(File file, Policy p, PublicKey PK, String outputFileName){
+	public static File enc(File file, Policy p, PublicKey PK, String outputFileName){
 		File ciphertextFile = createNewFile(outputFileName);
 		Element m = PairingManager.defaultPairing.getGT().newRandomElement();
 		if(debug){
@@ -123,7 +131,7 @@ public class CPABEImpl {
 		fill_policy(p, s, PK);
 		Ciphertext ciphertext = new Ciphertext();
 		ciphertext.p = p;
-		//此处m.duplicate()是为了后面AES加密中还需要用到m
+		// here m.duplicate() is for the latter AES encryption also need to use m
 		ciphertext.Cs = m.duplicate().mul(PK.g_hat_alpha.duplicate().powZn(s));
 		ciphertext.C = PK.h.duplicate().powZn(s); 
 		
@@ -144,6 +152,8 @@ public class CPABEImpl {
 				e.printStackTrace();
 			}
 		}
+		
+		return ciphertextFile;
 	}
 	
 	public static Element dec(Ciphertext ciphertext, SecretKey SK, PublicKey PK){
