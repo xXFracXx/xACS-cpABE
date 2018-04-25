@@ -1,6 +1,7 @@
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.security.Security;
+import java.util.Arrays;
 
 import javax.crypto.Cipher;
 import javax.crypto.CipherInputStream;
@@ -12,7 +13,8 @@ import javax.crypto.spec.SecretKeySpec;
 
 public class ExampleCrypt {
 
-    public static void main(String[] args) throws Exception {
+    @SuppressWarnings({ "resource" })
+	public static void main(String[] args) throws Exception {
 
 	Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
 	KeyGenerator keyGen = KeyGenerator.getInstance("AES");
@@ -21,14 +23,15 @@ public class ExampleCrypt {
 	for(int i=0; i<b.length; i++){
 		b[i] = (byte)i;
 	}
+	System.out.println(Arrays.toString(b));
 	SecretKey secKey = new SecretKeySpec(b, "AES");
 
 	// Encrypt
 
 	cipher.init(Cipher.ENCRYPT_MODE, secKey);
 
-	String cleartextFile = "README.md";
-	String ciphertextFile = "ciphertextSymm.txt";
+	String cleartextFile = "input.pdf";
+	String ciphertextFile = "ciphertextSymm";
 
 	FileInputStream fis = new FileInputStream(cleartextFile);
 	FileOutputStream fos = new FileOutputStream(ciphertextFile);
@@ -43,7 +46,7 @@ public class ExampleCrypt {
 
 	// Decrypt
 
-	String cleartextAgainFile = "cleartextAgainSymm.txt";
+	String cleartextAgainFile = "new.pdf";
 
 	cipher.init(Cipher.DECRYPT_MODE, secKey);
 

@@ -2,8 +2,13 @@ package userScripts;
 
 import java.io.IOException;
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.X509Certificate;
@@ -23,17 +28,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.annotation.WebServlet;
 
+import cn.edu.pku.ss.crypto.abe.api.*;
+
 /**
- * Servlet implementation class cloud_initialize
+ * Servlet implementation class ca_initialize
  */
-@WebServlet("/cloud_initialize")
-public class cloud_initialize extends HttpServlet {
+@WebServlet("/ca_initialize")
+public class ca_initialize extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public cloud_initialize() {
+    public ca_initialize() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -66,7 +73,7 @@ public class cloud_initialize extends HttpServlet {
 
         //System.out.println(n + " " + t);
         if (n > 10 || t > n || n < 1 || t < 1) {
-            response.sendRedirect("cloud/dashboard.jsp?#ntFail");
+            response.sendRedirect("ca/dashboard.jsp?#ntFail");
             return;
         } else {
             /*
@@ -118,27 +125,77 @@ public class cloud_initialize extends HttpServlet {
              * end of the fix
              */
 
-            int count = 0; // 1 cause of AA master account
+            int count = 0; 
             String SQLurl = "jdbc:mysql://localhost:3306/xacs_db";
             String user = "xacs";
             String password = "xacspassword";
+            
+            // MK & PK Setup -
+            
+            Path path = Paths.get("D:\\cpabe");
+            Files.createDirectories(path);
+            
+            path = Paths.get("D:\\cpabe/ca");
+            Files.createDirectories(path);
+
+            
+    		String PKFileName = "D:\\cpabe/ca/PKFile";
+    		String MKFileName = "D:\\cpabe/ca/MKFile";
+
+    		String[] keypairArr = new String[2];
+            keypairArr = CPABE.setup(PKFileName, MKFileName);
+            
+            File PKF = new File(PKFileName);
+            File MKF = new File(MKFileName);
+            
+            System.out.println(keypairArr[0] + " " + keypairArr[1]);
+            
+            String pkey = keypairArr[0];
+            String mkey = keypairArr[1];
 
             try {
+                File file1=new File("D:\\cpabe/ca/PKFile");
+                FileInputStream fis1=new FileInputStream(file1);
+                
+                File file2=new File("D:\\cpabe/ca/MKFile");
+                FileInputStream fis2=new FileInputStream(file2);
+                
+                Class.forName("com.mysql.jdbc.Driver");
                 conn = DriverManager.getConnection(SQLurl, user, password);
-                String sql = "INSERT INTO `acs_info` (`id`, `sysname`, `n`, `t`) VALUES ('1', 'xACS', '" + n + "', '" + t + "');";
+                String sql = "INSERT INTO acs_info (id, sysname, n, t, public_key, master_key, PKFile, MKFile) VALUES (1, 'xACS', '" + n + "', '" + t + "', '" + pkey + "', '" + mkey + "', ?, ?);";
                 PreparedStatement statement = conn.prepareStatement(sql);
+                statement.setBinaryStream(1,fis1,(int)file1.length());
+                statement.setBinaryStream(2,fis2,(int)file2.length());
                 statement.executeUpdate();
                 conn.close();
-//                conn = DriverManager.getConnection(SQLurl, user, password);
-//                sql = "INSERT INTO `aa_list` (`id`) VALUES ('1');";
-//                statement = conn.prepareStatement(sql);
-//                statement.executeUpdate();
-//                conn.close();
             } catch (Exception ex) {
                 ex.printStackTrace();
-                response.sendRedirect("cloud/dashboard.jsp?#acsInfoFail");
+                response.sendRedirect("ca/dashboard.jsp?#acsInfoFail");
                 return;
-            }
+            } 
+            
+//            try{
+//                Class.forName("com.mysql.jdbc.Driver");
+//                Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/xacs_db", "xacs", "xacspassword");
+//                
+//                File file1=new File("D:\\cpabe/PKFile");
+//                FileInputStream fis1=new FileInputStream(file1);
+//                
+//                File file2=new File("D:\\cpabe/PKFile");
+//                FileInputStream fis2=new FileInputStream(file2);
+//                
+//                PreparedStatement ps=con.prepareStatement("UPDATE acs_info SET (PKFile, MKFile) VALUES (?,?) WHERE id = 1"); 
+//                ps.setBinaryStream(1,fis1,(int)file1.length());
+//                ps.setBinaryStream(2,fis2,(int)file2.length());
+//                ps.executeUpdate();
+//     
+//                ps.close();
+//                fis1.close();
+//                fis2.close();
+//                con.close();
+//            }catch(Exception e){
+//                e.printStackTrace();
+//            }
 
             try {
 
@@ -168,11 +225,11 @@ public class cloud_initialize extends HttpServlet {
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
-                response.sendRedirect("cloud/dashboard.jsp?#AAIniFail");
+                response.sendRedirect("ca/dashboard.jsp?#AAIniFail");
                 return;
             }
 
-            response.sendRedirect("cloud/dashboard.jsp?#iniSucc");
+            response.sendRedirect("ca/dashboard.jsp?#iniSucc");
             return;
 
         }

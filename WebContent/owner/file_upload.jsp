@@ -41,46 +41,6 @@
 				break;
 		}
 	}
-
-	//Puplic key
-	/* Random Random = new SecureRandom();
-	int FILE_LENGTH = 17;
-	String letter = "zxcvbnmasdfghjklqwertyuiopZXCVBNMASDFGHJKLQWERTYUIOP";
-	String File_id = "";
-
-	for (int i = 0; i < FILE_LENGTH; i++) {
-		int index = (int) (Random.nextDouble() * letter.length());
-		File_id += letter.substring(index, index + 1);
-	}
-	String files = "FID" + File_id; */
-	//session.setAttribute("sessionfile", files);
-
-	//PK & MK Generation
-
-	String _userName = session.getAttribute("usr_name").toString();
-	_userName = _userName.replaceAll("\\s+", "");
-
-	File dir = new File("cpabe/" + _userName);
-	dir.mkdirs();
-
-	String PKFileName = "cpabe/" + _userName + "/PKFile";
-	String MKFileName = "cpabe/" + _userName + "/MKFile";
-
-	/* String PKFileName = "cpabe/PKFile";
-	String MKFileName = "cpabe/MKFile";
-	 */
-
-	String[] keypairArr = new String[2];
-	keypairArr = CPABE.setup(PKFileName, MKFileName);
-
-	//System.out.println("keys: " + keypairArr[0] + " " + keypairArr[1]);
-
-	String pkey = keypairArr[0];
-	String mkey = keypairArr[1];
-	session.setAttribute("pkey", pkey);
-	session.setAttribute("mkey", mkey);
-
-	//System.out.println(session.getAttribute("pkey"));
 %>
 
 <!DOCTYPE html>
@@ -398,20 +358,6 @@
 					<!--Change a few things up and try submitting again.-->
 				</div>
 
-				<!-- modal window -->
-				<div id="pKeyModal"
-					class="text-left g-max-width-600 g-bg-white g-overflow-y-auto g-pa-20"
-					style="display: none; width: 600px">
-					<button type="button" class="close"
-						onclick="Custombox.modal.close();">
-						<i class="hs-icon hs-icon-close"></i>
-					</button>
-					<h4 class="g-mb-20">Public Key</h4>
-					<code style="word-break:break-all; padding: 0px"><%=pkey%></code>
-				</div>
-				<!-- End modal window -->
-
-
 				<div class="col-md-12" style="padding-left: 0px; padding-right: 0px">
 					<div
 						class="g-pos-rel h-100 g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-15 g-pa-30--md u-card-v1">
@@ -421,25 +367,6 @@
 									<h1
 										class="g-font-weight-500 g-font-size-28 g-color-black g-mb-20">Upload
 										File</h1>
-								</div>
-								<div class="col">
-									<div class="media pull-right">
-										<div
-											class="media g-pos-rel g-bg-lightblue-v6 g-color-gray-dark-v6 g-rounded-10 g-pa-5">
-											<div class="d-flex align-self-center">
-												<i
-													class="hs-admin-key g-font-size-20 g-color-lightblue-v4 g-pl-5"></i>
-											</div>
-
-											<div class="media-body text-center">
-												<a class="btn g-hidden-sm-down g-color-teal"
-													href="#pKeyModal" data-modal-target="#pKeyModal"
-													data-modal-effect="fadein"
-													style="font-size: 12px; font-weight: 600;">View Public
-													Key </a>
-											</div>
-										</div>
-									</div>
 								</div>
 							</div>
 						</header>
@@ -464,7 +391,7 @@
 													class="hs-admin-user g-absolute-centered g-font-size-16 g-color-gray-light-v6"></i>
 												</span> <input id="inputGroup-1_3"
 													class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-4 g-px-14 g-py-10"
-													type="text" name="nameID" placeholder="Name / ID" required>
+													type="text" name="nameID" placeholder="Name / ID">
 											</div>
 										</div>
 									</div>
@@ -515,7 +442,11 @@
 									</div>
 									<div class="col-2">
 										<div class="form-group g-mb-30">
-											<label class="g-mb-10" for="inputGroup-1_3">&nbsp;</label>
+											<label class="g-mb-10" for="inputGroup-1_3">Enter AES
+												Key -</label>
+											<button
+												class="btn btn-xs u-btn-outline-darkgray align-self-center pull-right"
+												onclick="getElementById('random-number').value=(Math.random()+' ').substring(2,10)+(Math.random()+' ').substring(2,10);">random</button>
 
 											<div class="g-pos-rel">
 												<span
@@ -524,7 +455,8 @@
 													class="hs-admin-menu g-absolute-centered g-font-size-16 g-color-gray-light-v6"></i>
 												</span> <input
 													class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-4 g-px-14 g-py-10"
-													type="text" name="authLvl" placeholder="Auth Level">
+													type="text" name="aesKey" placeholder="k [16-digit]"
+													id="random-number" required>
 											</div>
 										</div>
 									</div>

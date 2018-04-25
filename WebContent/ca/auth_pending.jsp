@@ -437,9 +437,7 @@
                                                     } else if (rs.getString("role").equals("AA")) {
                                                         role = 3;
                                                     }
-
                                                     count++;
-
                                         %>
                                         <tr>
                                             <td><%=rs.getString("id")%></td>
@@ -451,7 +449,7 @@
                                                         if (count % 2 == 1) {
                                                     %>
 
-                                                    <span class="d-flex align-items-center justify-content-center u-tags-v1 g-brd-around g-bg-white g-font-size-default g-color-gray-dark-v6 g-brd-white g-rounded-50 g-py-4 g-px-15"></span>
+                                                    <span class="d-flex align-items-center justify-content-center u-tags-v1 g-brd-around g-bg-white g-font-size-default g-color-gray-dark-v6 g-brd-white g-rounded-50 g-py-4 g-px-15">
 
                                                         <%
                                                         } else {
@@ -479,7 +477,6 @@
                                                             other
                                                             <%  break;
                                                                 }
-
                                                             %>
                                                         </span>
                                                 </div>
@@ -503,7 +500,6 @@
                                                 sqls.stat = false;
                                                 ex.printStackTrace();
                                             }
-
                                         %>
                                     </tbody>
                                 </table>

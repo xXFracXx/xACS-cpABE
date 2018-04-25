@@ -10,23 +10,41 @@ import com.oreilly.servlet.MultipartRequest;
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.sql.Blob;
 import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
+
+import javax.crypto.Cipher;
+import javax.crypto.CipherOutputStream;
 import javax.crypto.KeyGenerator;
+import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.http.HttpSession;
 import DBcon.DbConnection;
 import DBcon.Ftpcon;
 import algo.encryption;
-
-import cn.edu.pku.ss.crypto.abe.api.*;
+import cn.edu.pku.ss.crypto.abe.PublicKey;
+import cn.edu.pku.ss.crypto.abe.api.CPABE;
+import cn.edu.pku.ss.crypto.abe.serialize.SerializeUtils;
 
 /**
  * Servlet implementation class Upload
@@ -60,128 +78,208 @@ public class Upload extends HttpServlet {
 		String current = userReq.getAttribute("usr_role").toString().toLowerCase();
 		int maxSize = 5242880;
 
-		String pkey = userReq.getAttribute("pkey").toString();
-		String mkey = userReq.getAttribute("mkey").toString();
+		MultipartRequest m = new MultipartRequest(request, filepath, maxSize);
+		file = m.getFile("file");
+		String filename = file.getName().toLowerCase();
 
+		String nameID = m.getParameter("nameID");
+		String emailID = m.getParameter("emailID");
+		String state = m.getParameter("state");
+		String country = m.getParameter("country");
+
+		String aesKey = m.getParameter("aesKey");
+		
+		Connection con = null;
 		try {
-
-			MultipartRequest m = new MultipartRequest(request, filepath, maxSize);
-			//String pkey = m.getParameter("public"); //OLD METHOD pKey
-			File file = m.getFile("file");
-			String filename = file.getName().toLowerCase();
-
-			String nameID = m.getParameter("nameID");
-			String emailID = m.getParameter("emailID");
-			String state = m.getParameter("state");
-			String country = m.getParameter("country");
-			String authLvl = m.getParameter("authLvl");
-
-			int pCount = 0;
-			String[] pArr = new String[5];
-
-			if (!(nameID.isEmpty())) {
-				pArr[pCount] = nameID;
-				pCount++;
-			}
-			if (!(emailID.isEmpty())) {
-				pArr[pCount] = emailID;
-				pCount++;
-			}
-			if (!(state.isEmpty())) {
-				pArr[pCount] = state;
-				pCount++;
-			}
-			if (!(country.isEmpty())) {
-				pArr[pCount] = country;
-				pCount++;
-			}
-			if (!(authLvl.isEmpty())) {
-				pArr[pCount] = authLvl;
-				pCount++;
-			}
-
-			String policy = "";
-			policy = Integer.toString(pCount) + " of (";
-			for (int i = 0; i < pCount; i++) {
-				policy += pArr[i];
-				if (!(i == pCount - 1)) {
-					policy += ",";
-				}
-			}
-			policy += ")";
-			System.out.println(policy);
-
-			Connection con = DbConnection.getConnection();
+			con = DbConnection.getConnection();
 			Statement st3 = con.createStatement();
 			ResultSet rt3 = st3.executeQuery("select * from file_upload where filename='" + filename + "'");
 			if (rt3.next()) {
 				response.sendRedirect(current + "/file_upload.jsp?#dupFail");
 				return;
-			} else {
+			} 
+		} catch (SQLException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
 
-				/*
-				 * BufferedReader br = new BufferedReader(new FileReader(filepath + filename));
-				 * StringBuffer sb = new StringBuffer(); String temp = null;
-				 * 
-				 * while ((temp = br.readLine()) != null) { sb.append(temp); }
-				 * 
-				 * KeyGenerator keyGen = KeyGenerator.getInstance("AES"); keyGen.init(128);
-				 * SecretKey secretKey = keyGen.generateKey(); System.out.println("secret key:"
-				 * + secretKey);
-				 * 
-				 * encryption e = new encryption(); String CipherText = e.encrypt(sb.toString(),
-				 * secretKey); FileWriter fw = new FileWriter(file); fw.write(CipherText);
-				 * fw.close();
-				 * 
-				 * byte[] b = secretKey.getEncoded(); String skey = Base64.encode(b);
-				 * System.out.println("converted secretkey to string:" + skey);
-				 */
+		int[] intArray = new int[16];
+		int j = 0;
+		String s = aesKey;
+		int strLength = s.length();
+		if (strLength != 16) {
+			System.out.println("Not a valid length");
+		} else {
+			for (j = 0; j < 16; j++) {
+				if (!Character.isDigit(s.charAt(j))) {
+					System.out.println("Contains an invalid digit");
+					break;
+				}
+				intArray[j] = Integer.parseInt(String.valueOf(s.charAt(j)));
+			}
+		}
+		System.out.println(Arrays.toString(intArray));
 
-				File ciphertextFile;
-				HttpSession session = request.getSession();
-				String _userName = session.getAttribute("usr_name").toString();
-				_userName = _userName.replaceAll("\\s+", "");
-				String ciphertextFileName = "cpabe/" + _userName + "/" + file.getName() + ".cpabe";
-				String PKFileName = "cpabe/" + _userName + "/PKFile";
-				ciphertextFile = CPABE.enc(file, policy, ciphertextFileName, PKFileName);
-				
-				String MKFileName = "cpabe/" + _userName + "/MKFile";
-				File pkFile = new File(PKFileName);
-				File mkFile = new File(MKFileName);
+		Path path = Paths.get("D:\\cpabe");
+		Files.createDirectories(path);
 
-				String owner = userReq.getAttribute("usr_name").toString();
-				DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-				Date date = new Date();
-				String time = dateFormat.format(date);
+		path = Paths.get("D:\\cpabe/owner");
+		Files.createDirectories(path);
 
-				boolean status = new Ftpcon().upload(ciphertextFile);
-				// status = true; //CHANGE ME FOR SURE !!!
-				if (status) {
-					Statement st = con.createStatement();
-					int i = st.executeUpdate(
-							"insert into file_upload(filename,content,owner,time,master_key,public_key,PKFile,MKFile)values('"
-									+ file.getName() + "','" + ciphertextFile + "','" + owner + "','" + time + "','"
-									+ mkey + "','" + pkey + "','" + pkFile + "','" + mkFile + "')");
-					System.out.println(i);
-					if (i != 0) {
-						response.sendRedirect(current + "/file_upload.jsp?#uploadSucc");
-						return;
-					} else {
-						response.sendRedirect(current + "/file_upload.jsp?#uploadFail");
-						return;
-					}
+		try {
+			Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+			KeyGenerator keyGen = KeyGenerator.getInstance("AES");
+			// SecretKey secKey = keyGen.generateKey();
+			byte[] b = new byte[16];
+			for (int i = 0; i < b.length; i++) {
+				b[i] = (byte) intArray[i];
+			}
+			System.out.println(Arrays.toString(b));
+			SecretKey secKey = new SecretKeySpec(b, "AES");
+
+			// Encrypt
+
+			cipher.init(Cipher.ENCRYPT_MODE, secKey);
+
+			// String cleartextFile = "README.md";
+			String ciphertextFile = "D:\\cpabe/" + current + "/encFile";
+
+			FileInputStream fis = new FileInputStream(file);
+			FileOutputStream fos1 = new FileOutputStream(ciphertextFile);
+			CipherOutputStream cos = new CipherOutputStream(fos1, cipher);
+
+			byte[] block = new byte[8];
+			int i;
+			while ((i = fis.read(block)) != -1) {
+				cos.write(block, 0, i);
+			}
+			cos.close();
+		} catch (NoSuchAlgorithmException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (NoSuchPaddingException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (InvalidKeyException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		PrintWriter writer = new PrintWriter("D:\\cpabe/" + current + "/aesKey", "UTF-8");
+		writer.print(aesKey);
+		writer.close();
+
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			con = DriverManager.getConnection("jdbc:mysql://localhost:3306/xacs_db", "xacs", "xacspassword");
+
+			File file2 = new File("D:\\cpabe/" + current + "/PKFile");
+			FileOutputStream fos = new FileOutputStream(file2);
+			byte b1[];
+			Blob blob;
+
+			PreparedStatement ps = con.prepareStatement("select * from acs_info where id = 1");
+			ResultSet rs = ps.executeQuery();
+
+			while (rs.next()) {
+				blob = rs.getBlob("PKFile");
+				b1 = blob.getBytes(1, (int) blob.length());
+				fos.write(b1);
+			}
+
+			ps.close();
+			fos.close();
+			con.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		String PKFileName = "D:\\cpabe/owner/PKFile";
+		PublicKey PK = SerializeUtils.unserialize(PublicKey.class, new File(PKFileName));
+		
+		byte[] b1 = SerializeUtils.convertToByteArray(PK);
+        String pkey = Base64.encode(b1);
+        System.out.println("[PK from CA] " + pkey);
+
+		String p1 = "", p2 = " of (", p3 = "";
+		int aCount = 0;
+
+		if (!(nameID.isEmpty())) {
+			aCount++;
+			p3 += nameID;
+			if (aCount < 4 && aCount > 1)
+				p3 += ",";
+		}
+		if (!(emailID.isEmpty())) {
+			aCount++;
+			p3 += emailID;
+			if (aCount < 4 && aCount > 1)
+				p3 += ",";
+		}
+		if (!(state.isEmpty())) {
+			aCount++;
+			p3 += state;
+			if (aCount < 4 && aCount > 1)
+				p3 += ",";
+		}
+		if (!(country.isEmpty())) {
+			aCount++;
+			p3 += country;
+			if (aCount < 4 && aCount > 1)
+				p3 += ",";
+		}
+
+		if (aCount == 0) {
+			p3 = "a";
+		}
+
+		p1 = String.valueOf(aCount);
+		String policy = p1 + p2 + p3 + ")";
+
+		System.out.println("p - " + policy);
+
+		String encFileName = "D:\\cpabe/owner/aesKey";
+		String ciphertextFileName = "D:\\cpabe/owner/encAesKey";
+
+		CPABE.enc(encFileName, policy, ciphertextFileName, PKFileName);
+
+		File encFile = new File(encFileName);
+		File encAesKey = new File(encFileName);
+
+		try {
+
+			String owner = userReq.getAttribute("usr_name").toString();
+			DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+			Date date = new Date();
+			String time = dateFormat.format(date);
+
+			boolean status = new Ftpcon().upload(file);
+			// status = true; //CHANGE ME FOR SURE !!!
+			if (status) {
+				con = DriverManager.getConnection("jdbc:mysql://localhost:3306/xacs_db", "xacs", "xacspassword");
+				Statement st = con.createStatement();
+				int o = st.executeUpdate("insert into file_upload (filename,encFile,owner,time,encAesKey) values ('"
+						+ file.getName() + "','" + encFile + "','" + owner + "','" + time + "','" + encAesKey + "')");
+				System.out.println(o);
+				if (o != 0) {
+					response.sendRedirect(current + "/file_upload.jsp?#uploadSucc");
+					return;
 				} else {
-					response.sendRedirect(current + "/file_upload.jsp?#ftpFail");
+					response.sendRedirect(current + "/file_upload.jsp?#uploadFail");
 					return;
 				}
+			} else {
+				response.sendRedirect(current + "/file_upload.jsp?#ftpFail");
+				return;
 			}
 		} catch (Exception e) {
-			out.println(e);
-			//response.sendRedirect(current + "/file_upload.jsp?#sizeFail");
-			//return;
+			System.out.println(e);
+			response.sendRedirect(current + "/file_upload.jsp?#sizeFail");
+			return;
 		} finally {
 			out.close();
 		}
+
 	}
 
 	/**

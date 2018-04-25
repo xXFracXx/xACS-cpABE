@@ -244,7 +244,7 @@
                         <!--<h1 class="g-font-weight-300 g-font-size-28 g-color-black g-mb-30">User Details</h1>-->
                         <div class="media-md align-items-center g-mb-30">
                             <div class="d-flex g-mb-15 g-mb-0--md">
-                                <h1 class="g-font-weight-500 g-font-size-28 g-color-black">Authorized Users &amp; AAs</h1>
+                                <h1 class="g-font-weight-500 g-font-size-28 g-color-black">Authorized Users & AAs</h1>
                             </div>
 
                             <div class="media d-md-flex align-items-center ml-auto">
@@ -416,7 +416,6 @@
                                                     } else if (rs.getString("role").equals("AA")) {
                                                         role = 3;
                                                     }
-
                                                     count++;
                                         %>
                                         <tr>
@@ -429,7 +428,7 @@
                                                         if (count % 2 == 1) {
                                                     %>
 
-                                                    <span class="d-flex align-items-center justify-content-center u-tags-v1 g-brd-around g-bg-white g-font-size-default g-color-gray-dark-v6 g-brd-white g-rounded-50 g-py-4 g-px-15"></span>
+                                                    <span class="d-flex align-items-center justify-content-center u-tags-v1 g-brd-around g-bg-white g-font-size-default g-color-gray-dark-v6 g-brd-white g-rounded-50 g-py-4 g-px-15">
 
                                                         <%
                                                         } else {
@@ -457,7 +456,6 @@
                                                             other
                                                             <%  break;
                                                                 }
-
                                                             %>
                                                         </span>
                                                 </div>
@@ -472,7 +470,6 @@
                                                     <a id="dropDown1Invoker" class="u-link-v5 g-line-height-0 g-font-size-24 g-color-gray-light-v6 g-color-lightblue-v3--hover" href="#!" aria-controls="dropDown1" aria-haspopup="true" aria-expanded="false" data-dropdown-event="click" data-dropdown-target="#dropDown1">
                                                         <i class="hs-admin-more-alt"></i>
                                                     </a>
-
                                                     <div id="dropDown1" class="u-shadow-v31 g-pos-abs g-right-0 g-z-index-2 g-bg-white" aria-labelledby="dropDown1Invoker">
                                                         <ul class="list-unstyled g-nowrap mb-0">
                                                             <li>
@@ -492,7 +489,6 @@
                                                 sqls.stat = false;
                                                 ex.printStackTrace();
                                             }
-
                                         %>
                                     </tbody>
                                 </table>
