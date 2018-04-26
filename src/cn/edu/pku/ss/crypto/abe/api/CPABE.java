@@ -36,24 +36,27 @@ public class CPABE {
 	public static final String Error_Ciphertext_Missing = "Must set the name of the file that to be decrypted!";
 	public static final String Error_Enc_Directory = "Can not encrypt a directory!";
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		CPABEImpl.debug = true;
 
-		String encFileName = "cpabe/input.pdf";
-		String ciphertextFileName = "cpabe/test.cpabe";
-		String PKFileName = "cpabe/PKFile";
-		String MKFileName = "cpabe/MKFile";
-		String SKFileName = "cpabe/SKFile";
-		String policy = "2 of (A1,A2,A3)";
-		String[] attrs = new String[] { "A1", "A2" };
+		String encFileName = "D:\\cpabe/image.jpg";
+		String ciphertextFileName = "D:\\cpabe/owner/encFile";
+		String PKFileName = "D:\\cpabe/ca/PKFile";
+		String MKFileName = "D:\\cpabe/ca/MKFile";
+		String SKFileName = "D:\\cpabe/user/SKFileNEW";
+		String policy = "1 of (Rajas)";
+		String[] attrs = new String[] { "Rajas", "mail", "KA", "India" };
 
 		String[] keypairArr = new String[2];
 		File ciphertextFile;
 
-		keypairArr = setup(PKFileName, MKFileName);
-		ciphertextFile = enc(encFileName, policy, ciphertextFileName, PKFileName);
-		keygen(attrs, PKFileName, MKFileName, SKFileName);
+		//keypairArr = setup(PKFileName, MKFileName);
+		//ciphertextFile = enc(encFileName, policy, ciphertextFileName, PKFileName);
+		//keygen(attrs, PKFileName, MKFileName, SKFileName);
+		
+		System.out.println("test");
 		dec(ciphertextFileName, PKFileName, SKFileName);
+		System.out.println("test2");
 	}
 
 	private static void err(String s) {
@@ -72,7 +75,7 @@ public class CPABE {
 		return keypairArr;
 	}
 
-	public static File enc(String encFileName, String policy, String outputFileName, String PKFileName) {
+	public static File enc(String encFileName, String policy, String outputFileName, String PKFileName) throws IOException {
 		if (isEmptyString(encFileName)) {
 			err(Error_EncFile_Missing);
 			return null;
@@ -115,7 +118,7 @@ public class CPABE {
 		return ciphertextFile;
 	}
 
-	public static File enc(File encFile, String policy, String outputFileName, String PKFileName) {
+	public static File enc(File encFile, String policy, String outputFileName, String PKFileName) throws IOException {
 		/*if (isEmptyString(encFileName)) {
 			err(Error_EncFile_Missing);
 			return null;
@@ -158,41 +161,44 @@ public class CPABE {
 		return ciphertextFile;
 	}
 
-	public static void keygen(String[] attrs, String PKFileName, String MKFileName, String SKFileName) {
+	public static SecretKey keygen(String[] attrs, String PKFileName, String MKFileName, String SKFileName) {
 		if (attrs == null || attrs.length == 0) {
 			err(Error_Attributes_Missing);
-			return;
+			return null;
 		}
 		if (isEmptyString(PKFileName)) {
 			err(Error_PK_Missing);
-			return;
+			return null;
 		}
 		if (isEmptyString(MKFileName)) {
 			err(Error_MK_Missing);
-			return;
+			return null;
 		}
 		SKFileName = isEmptyString(SKFileName) ? Default_SKFileName : SKFileName;
 		PublicKey PK = SerializeUtils.unserialize(PublicKey.class, new File(PKFileName));
 		if (PK == null) {
 			err(Error_PK_Missing);
-			return;
+			return null;
 		}
 		MasterKey MK = SerializeUtils.unserialize(MasterKey.class, new File(MKFileName));
-		CPABEImpl.keygen(attrs, PK, MK, SKFileName);
+		SecretKey SK = new SecretKey();
+		SK = CPABEImpl.keygen(attrs, PK, MK, SKFileName);
+		
+		return SK;
 	}
 
-	public static void dec(String ciphertextFileName, String PKFileName, String SKFileName) {
+	public static boolean dec(String ciphertextFileName, String PKFileName, String SKFileName) throws IOException {
 		if (isEmptyString(ciphertextFileName)) {
 			err(Error_Ciphertext_Missing);
-			return;
+			return false;
 		}
 		if (isEmptyString(PKFileName)) {
 			err(Error_PK_Missing);
-			return;
+			return false;
 		}
 		if (isEmptyString(SKFileName)) {
 			err(Error_SK_Missing);
-			return;
+			return false;
 		}
 
 		DataInputStream dis = null;
@@ -206,26 +212,28 @@ public class CPABE {
 		Ciphertext ciphertext = SerializeUtils._unserialize(Ciphertext.class, dis);
 		if (ciphertext == null) {
 			err(Error_Ciphertext_Missing);
-			return;
+			return false;
 		}
 		PublicKey PK = SerializeUtils.unserialize(PublicKey.class, new File(PKFileName));
 		if (PK == null) {
 			err(Error_PK_Missing);
-			return;
+			return false;
 		}
 		SecretKey SK = SerializeUtils.unserialize(SecretKey.class, new File(SKFileName));
 		if (SK == null) {
 			err(Error_SK_Missing);
-			return;
+			return false;
 		}
 
-		String output = null;
-		if (ciphertextFileName.endsWith(".cpabe")) {
-			int end = ciphertextFileName.indexOf(".cpabe");
-			output = ciphertextFileName.substring(0, end);
-		} else {
-			output = ciphertextFileName + ".out";
-		}
+//		String output = null;
+//		if (ciphertextFileName.endsWith(".cpabe")) {
+//			int end = ciphertextFileName.indexOf(".cpabe");
+//			output = ciphertextFileName.substring(0, end);
+//		} else {
+//			output = ciphertextFileName + ".out";
+//		}
+		
+		String output = ciphertextFileName + "dec";
 		File outputFile = CPABEImpl.createNewFile(output);
 		OutputStream os = null;
 		try {
@@ -234,7 +242,24 @@ public class CPABE {
 			e.printStackTrace();
 		}
 		Element m = CPABEImpl.dec(ciphertext, SK, PK);
-		AES.crypto(Cipher.DECRYPT_MODE, dis, os, m);
+		System.out.println(m);
+		if(null == m || m.isEqual(null)) {
+			System.out.println("pls work");
+			os.close();
+			dis.close();
+			return false;
+		}
+		try {
+			AES.crypto(Cipher.DECRYPT_MODE, dis, os, m);
+		} catch (NullPointerException npe) {
+			os.close();
+			dis.close();
+			return false;
+		}
+		os.close();
+		dis.close();
+		System.out.println("returning true");
+		return true;
 	}
 
 }

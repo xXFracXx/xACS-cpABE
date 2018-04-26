@@ -26,6 +26,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import aaScripts.KeyGen;
+import aaScripts.ListGen;
+
 import javax.servlet.annotation.WebServlet;
 
 import cn.edu.pku.ss.crypto.abe.api.*;
@@ -174,29 +178,6 @@ public class ca_initialize extends HttpServlet {
                 return;
             } 
             
-//            try{
-//                Class.forName("com.mysql.jdbc.Driver");
-//                Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/xacs_db", "xacs", "xacspassword");
-//                
-//                File file1=new File("D:\\cpabe/PKFile");
-//                FileInputStream fis1=new FileInputStream(file1);
-//                
-//                File file2=new File("D:\\cpabe/PKFile");
-//                FileInputStream fis2=new FileInputStream(file2);
-//                
-//                PreparedStatement ps=con.prepareStatement("UPDATE acs_info SET (PKFile, MKFile) VALUES (?,?) WHERE id = 1"); 
-//                ps.setBinaryStream(1,fis1,(int)file1.length());
-//                ps.setBinaryStream(2,fis2,(int)file2.length());
-//                ps.executeUpdate();
-//     
-//                ps.close();
-//                fis1.close();
-//                fis2.close();
-//                con.close();
-//            }catch(Exception e){
-//                e.printStackTrace();
-//            }
-
             try {
 
                 if (true) { //Auto gen master AA User & Owner
@@ -208,6 +189,12 @@ public class ca_initialize extends HttpServlet {
                     stmt.executeUpdate("INSERT INTO reg (name, pass, email, dob, gen, role, state, country, status, audd, joinDate) VALUES ('MasterOwner', 'password', 'xacsmail@gmail.com', '1996-10-06', 'Male', 'Owner', 'Manipal', 'India', 'Yes', null, '2000-01-01 00:00:00')");
                     //stmt.executeUpdate("update aa_list set aa1 = 'AIDmast' where id = 1");
                 }
+                
+            	KeyGen kg = new KeyGen();
+            	boolean skGen = kg.aaKeyGen("UIDmast");
+            	
+				ListGen lg = new ListGen();
+				boolean aaLGen = lg.aaListGen("AIDmast");
 
                 URL url = new URL("https://my.api.mockaroo.com/regxacssysini.json?key=4ad46c20&__method=POST");
                 BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));

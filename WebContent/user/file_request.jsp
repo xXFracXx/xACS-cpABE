@@ -376,7 +376,7 @@
                                         try {
                                             con = DbConnection.getConnection();
                                             st = con.createStatement();
-                                            rs = st.executeQuery("select *, OCTET_LENGTH(content) as size from file_upload");
+                                            rs = st.executeQuery("select *, OCTET_LENGTH(encFile) as size from file_upload");
 
                                             while (rs.next()) {
                                                 String fileName = rs.getString("filename");
@@ -470,7 +470,7 @@
 
                                                     <div class="media-body text-center">
                                                         <span class="g-hidden-sm-down g-font-weight-300 g-color-gray-dark-v6 ink">
-                                                            <small><%=rs.getString("public_key")%></small>
+                                                            <small>view key</small>
                                                         </span>
                                                     </div>
                                                 </div>

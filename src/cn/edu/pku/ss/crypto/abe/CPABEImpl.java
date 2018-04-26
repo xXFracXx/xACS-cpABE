@@ -74,7 +74,7 @@ public class CPABEImpl {
 		setup(pk, mk);
 	}
 
-	public static void keygen(String[] attrs, PublicKey PK, MasterKey MK, String SKFileName){
+	public static SecretKey keygen(String[] attrs, PublicKey PK, MasterKey MK, String SKFileName){
 		if(SKFileName == null || SKFileName.trim().equals("")){
 			SKFileName = "SecretKey";
 		}
@@ -97,6 +97,8 @@ public class CPABEImpl {
 		}
 		
 		SerializeUtils.serialize(SK, SKFile);
+		
+		return SK;
 	}
 	
 	public static File createNewFile(String fileName){
@@ -121,7 +123,7 @@ public class CPABEImpl {
 		return file;
 	}
 	
-	public static File enc(File file, Policy p, PublicKey PK, String outputFileName){
+	public static File enc(File file, Policy p, PublicKey PK, String outputFileName) throws IOException{
 		File ciphertextFile = createNewFile(outputFileName);
 		Element m = PairingManager.defaultPairing.getGT().newRandomElement();
 		if(debug){
@@ -153,6 +155,9 @@ public class CPABEImpl {
 			}
 		}
 		
+
+		fos.close();
+		
 		return ciphertextFile;
 	}
 	
@@ -160,6 +165,7 @@ public class CPABEImpl {
 		check_sat(SK, ciphertext.p);
 		if(ciphertext.p.satisfiable != 1){
 			System.err.println("SK does not satisfies the policy!");
+			
 			return null;
 		}
 		pick_sat_min_leaves(ciphertext.p, SK);

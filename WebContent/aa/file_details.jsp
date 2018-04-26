@@ -354,7 +354,7 @@
                                         try {
                                             con = DbConnection.getConnection();
                                             st = con.createStatement();
-                                            rs = st.executeQuery("select *, OCTET_LENGTH(content) as size from file_upload");
+                                            rs = st.executeQuery("select *, OCTET_LENGTH(encFile) as size from file_upload");
                                             
                                             while (rs.next()) {
                                                 String fileName = rs.getString("filename");

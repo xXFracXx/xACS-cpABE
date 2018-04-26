@@ -9,8 +9,7 @@ import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpSession;
-import java.sql.Statement;
-import java.sql.Connection;
+
 import DBcon.DbConnection;
 import javax.servlet.annotation.WebServlet;
 
@@ -40,8 +39,34 @@ public class owner_fileDelete extends HttpServlet {
         HttpSession user = request.getSession(true);
         String owner = user.getAttribute("usr_name").toString();
         try {
-            Connection con = DbConnection.getConnection();
-            Statement st = con.createStatement();
+        	
+        	Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/xacs_aa", "xacs", "xacspassword");
+			Statement st = con.createStatement();
+			
+			st.executeUpdate("TRUNCATE TABLE aalist");
+			
+			con = DbConnection.getConnection();
+            st = con.createStatement();
+            String fname = "";
+            ResultSet rs = st.executeQuery("SELECT filename FROM file_upload WHERE id = " + id + " and owner = \"" + owner + "\"");
+            while(rs.next()) {
+            	fname = rs.getString("filename");
+            }
+        	
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/xacs_aa", "xacs", "xacspassword");
+			st = con.createStatement();
+        	String[] aaArr = new String[]{"aa1reqs", "aa2reqs", "aa3reqs", "aa4reqs", "aa5reqs", "aa6reqs", "aa7reqs", "aa8reqs", "aa9reqs", "aa10reqs"};
+			int n = aaArr.length;
+			for(int i = 0; i < n; i++)
+				st.executeUpdate("DELETE FROM " + aaArr[i] + " WHERE fname = \"" + fname + "\"");
+        	
+			con = DbConnection.getConnection();
+            st = con.createStatement();
+            st.executeUpdate("DELETE FROM request WHERE fname = \"" + fname + "\"");
+			
+            con = DbConnection.getConnection();
+            st = con.createStatement();
             int i = st.executeUpdate("DELETE FROM file_upload WHERE id = " + id + " and owner = \"" + owner + "\"");
             if (i != 0) {
                 response.sendRedirect("owner/file_details.jsp#delSucc");
@@ -52,7 +77,10 @@ public class owner_fileDelete extends HttpServlet {
             }
         } catch (SQLException ex) {
             Logger.getLogger(owner_fileDelete.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        } catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	/**

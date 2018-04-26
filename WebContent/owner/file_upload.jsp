@@ -391,7 +391,7 @@
 													class="hs-admin-user g-absolute-centered g-font-size-16 g-color-gray-light-v6"></i>
 												</span> <input id="inputGroup-1_3"
 													class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-4 g-px-14 g-py-10"
-													type="text" name="nameID" placeholder="Name / ID">
+													type="text" name="nameID" placeholder="UID">
 											</div>
 										</div>
 									</div>

@@ -39,6 +39,9 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.http.HttpSession;
+
+import org.apache.commons.io.FileUtils;
+
 import DBcon.DbConnection;
 import DBcon.Ftpcon;
 import algo.encryption;
@@ -72,6 +75,11 @@ public class Upload extends HttpServlet {
 		// TODO Auto-generated method stub
 		response.getWriter().append("Served at: ").append(request.getContextPath());
 		response.setContentType("text/html;charset=UTF-8");
+		
+		if (new File("D:\\cpabe/owner").exists()) {
+			File userFld = new File("D:\\cpabe/owner");
+			FileUtils.deleteDirectory(userFld);
+		}
 
 		PrintWriter out = response.getWriter();
 		HttpSession userReq = request.getSession(true);
@@ -88,7 +96,7 @@ public class Upload extends HttpServlet {
 		String country = m.getParameter("country");
 
 		String aesKey = m.getParameter("aesKey");
-		
+
 		Connection con = null;
 		try {
 			con = DbConnection.getConnection();
@@ -97,7 +105,7 @@ public class Upload extends HttpServlet {
 			if (rt3.next()) {
 				response.sendRedirect(current + "/file_upload.jsp?#dupFail");
 				return;
-			} 
+			}
 		} catch (SQLException e2) {
 			// TODO Auto-generated catch block
 			e2.printStackTrace();
@@ -194,57 +202,42 @@ public class Upload extends HttpServlet {
 			e.printStackTrace();
 		}
 
-		String PKFileName = "D:\\cpabe/owner/PKFile";
-		PublicKey PK = SerializeUtils.unserialize(PublicKey.class, new File(PKFileName));
-		
-		byte[] b1 = SerializeUtils.convertToByteArray(PK);
-        String pkey = Base64.encode(b1);
-        System.out.println("[PK from CA] " + pkey);
+		String policy = "";
 
-		String p1 = "", p2 = " of (", p3 = "";
+		String[] attrArr = new String[5];
+
+		attrArr[0] = "globalAttr";
+		attrArr[1] = nameID;
+		attrArr[2] = emailID;
+		attrArr[3] = state;
+		attrArr[4] = country;
+
+		String midP = "";
 		int aCount = 0;
-
-		if (!(nameID.isEmpty())) {
-			aCount++;
-			p3 += nameID;
-			if (aCount < 4 && aCount > 1)
-				p3 += ",";
+		for (int i = 0; i < 5; i++) {
+			if (!(attrArr[i].isEmpty())) {
+				aCount++;
+				midP += attrArr[i];
+				if (!(attrArr[i + 1].isEmpty()))
+					midP += ",";
+			}
 		}
-		if (!(emailID.isEmpty())) {
-			aCount++;
-			p3 += emailID;
-			if (aCount < 4 && aCount > 1)
-				p3 += ",";
-		}
-		if (!(state.isEmpty())) {
-			aCount++;
-			p3 += state;
-			if (aCount < 4 && aCount > 1)
-				p3 += ",";
-		}
-		if (!(country.isEmpty())) {
-			aCount++;
-			p3 += country;
-			if (aCount < 4 && aCount > 1)
-				p3 += ",";
-		}
-
-		if (aCount == 0) {
-			p3 = "a";
-		}
-
-		p1 = String.valueOf(aCount);
-		String policy = p1 + p2 + p3 + ")";
+		
+		policy = String.valueOf(aCount) + " of (" + midP + ")";
 
 		System.out.println("p - " + policy);
 
 		String encFileName = "D:\\cpabe/owner/aesKey";
 		String ciphertextFileName = "D:\\cpabe/owner/encAesKey";
+		String PKFileName = "D:\\cpabe/owner/PKFile";
 
 		CPABE.enc(encFileName, policy, ciphertextFileName, PKFileName);
 
 		File encFile = new File(encFileName);
-		File encAesKey = new File(encFileName);
+		FileInputStream fis1 = new FileInputStream(encFile);
+
+		File encAesKey = new File(ciphertextFileName);
+		FileInputStream fis2 = new FileInputStream(encAesKey);
 
 		try {
 
@@ -256,10 +249,30 @@ public class Upload extends HttpServlet {
 			boolean status = new Ftpcon().upload(file);
 			// status = true; //CHANGE ME FOR SURE !!!
 			if (status) {
-				con = DriverManager.getConnection("jdbc:mysql://localhost:3306/xacs_db", "xacs", "xacspassword");
-				Statement st = con.createStatement();
-				int o = st.executeUpdate("insert into file_upload (filename,encFile,owner,time,encAesKey) values ('"
-						+ file.getName() + "','" + encFile + "','" + owner + "','" + time + "','" + encAesKey + "')");
+
+				String SQLurl = "jdbc:mysql://localhost:3306/xacs_db";
+				String user = "xacs";
+				String password = "xacspassword";
+				Class.forName("com.mysql.jdbc.Driver");
+				Connection conn = DriverManager.getConnection(SQLurl, user, password);
+				String sql = "insert into file_upload (filename, encFile, owner, time, encAesKey) values ('"
+						+ file.getName() + "', ?,'" + owner + "','" + time + "', ?)";
+				PreparedStatement statement = conn.prepareStatement(sql);
+				statement.setBinaryStream(1, fis1, (int) encFile.length());
+				statement.setBinaryStream(2, fis2, (int) encAesKey.length());
+				int o = statement.executeUpdate();
+				conn.close();
+				
+				fis1.close();
+				fis2.close();
+
+				// con = DriverManager.getConnection("jdbc:mysql://localhost:3306/xacs_db",
+				// "xacs", "xacspassword");
+				// Statement st = con.createStatement();
+				// int o = st.executeUpdate("insert into file_upload
+				// (filename,encFile,owner,time,encAesKey) values ('" + file.getName() + "','" +
+				// encFile + "','" + owner + "','" + time + "','" + encAesKey + "')");
+
 				System.out.println(o);
 				if (o != 0) {
 					response.sendRedirect(current + "/file_upload.jsp?#uploadSucc");

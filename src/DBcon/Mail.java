@@ -18,7 +18,7 @@ public class Mail {
         String to = email; // list of recipient email addresses
         String subject;
         if(type.equals("sk")){
-            subject = "File Request: Secret Key!"; 
+            subject = "File Request: Approved!"; 
         } else if(type.equals("activate")){
             subject = "Welcome to xACS!";
         } else {
