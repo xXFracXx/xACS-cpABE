@@ -40,7 +40,7 @@ public class ca_reset extends HttpServlet {
 		// TODO Auto-generated method stub
 		response.getWriter().append("Served at: ").append(request.getContextPath());
 		
-		//FileUtils.deleteDirectory(new File("D:\\cpabe"));
+		//FileUtils.deleteDirectory(new File("cpabe"));
 		
 		try {
 			Class.forName("com.mysql.jdbc.Driver");

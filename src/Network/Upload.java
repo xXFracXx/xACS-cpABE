@@ -95,8 +95,8 @@ public class Upload extends HttpServlet {
 		response.getWriter().append("Served at: ").append(request.getContextPath());
 		response.setContentType("text/html;charset=UTF-8");
 		
-		if (new File("D:\\cpabe/owner").exists()) {
-			File userFld = new File("D:\\cpabe/owner");
+		if (new File("cpabe/owner").exists()) {
+			File userFld = new File("cpabe/owner");
 			FileUtils.deleteDirectory(userFld);
 		}
 
@@ -148,10 +148,10 @@ public class Upload extends HttpServlet {
 //		}
 //		System.out.println(Arrays.toString(intArray));
 
-		Path path = Paths.get("D:\\cpabe");
+		Path path = Paths.get("cpabe");
 		Files.createDirectories(path);
 
-		path = Paths.get("D:\\cpabe/owner");
+		path = Paths.get("cpabe/owner");
 		Files.createDirectories(path);
 		
 
@@ -201,9 +201,9 @@ public class Upload extends HttpServlet {
 //			e.printStackTrace();
 //		}
 		
-		String ivFileName = "D:\\cpabe/" + current + "/iv.enc";
-		String saltFileName = "D:\\cpabe/" + current + "/salt.enc";
-		String ciphertextFile = "D:\\cpabe/" + current + "/encFile.des";
+		String ivFileName = "cpabe/" + current + "/iv.enc";
+		String saltFileName = "cpabe/" + current + "/salt.enc";
+		String ciphertextFile = "cpabe/" + current + "/encFile.des";
 		
 		try {
 		
@@ -279,7 +279,7 @@ public class Upload extends HttpServlet {
 				
 		
 		
-		PrintWriter writer = new PrintWriter("D:\\cpabe/" + current + "/aesKey", "UTF-8");
+		PrintWriter writer = new PrintWriter("cpabe/" + current + "/aesKey", "UTF-8");
 		writer.print(aesKey);
 		writer.close();
 
@@ -287,7 +287,7 @@ public class Upload extends HttpServlet {
 			Class.forName("com.mysql.jdbc.Driver");
 			con = DriverManager.getConnection("jdbc:mysql://localhost:3306/xacs_db", "xacs", "xacspassword");
 
-			File file2 = new File("D:\\cpabe/" + current + "/PKFile");
+			File file2 = new File("cpabe/" + current + "/PKFile");
 			FileOutputStream fos = new FileOutputStream(file2);
 			byte b1[];
 			Blob blob;
@@ -333,14 +333,14 @@ public class Upload extends HttpServlet {
 
 		System.out.println("p - " + policy);
 
-		String encFileName = "D:\\cpabe/owner/aesKey";
-		String ciphertextFileName = "D:\\cpabe/owner/encAesKey";
-		String PKFileName = "D:\\cpabe/owner/PKFile";
+		String encFileName = "cpabe/owner/aesKey";
+		String ciphertextFileName = "cpabe/owner/encAesKey";
+		String PKFileName = "cpabe/owner/PKFile";
 
 		CPABE.enc(encFileName, policy, ciphertextFileName, PKFileName);
 		
 
-		String ciphertextFileNEW = "D:\\cpabe/" + current + "/encFile.des";
+		String ciphertextFileNEW = "cpabe/" + current + "/encFile.des";
 
 		File encFile = new File(ciphertextFileNEW);
 		FileInputStream fis1 = new FileInputStream(encFile);

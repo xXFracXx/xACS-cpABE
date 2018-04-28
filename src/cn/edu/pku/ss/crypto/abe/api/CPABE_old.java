@@ -38,11 +38,11 @@ public class CPABE_old {
 	
 	public static void main(String[] args) {
 		CPABEImpl.debug = true;
-		String encFileName = "D:\\cpabe/owner/JohnImpNumb.txt";
-		String ciphertextFileName = "D:\\cpabe/owner/encAesKey";
-		String PKFileName = "D:\\cpabe/ca/PKFile";
-		String MKFileName = "D:\\cpabe/ca/MKFile";
-		String SKFileName = "D:\\cpabe/user/SKFile";
+		String encFileName = "cpabe/owner/JohnImpNumb.txt";
+		String ciphertextFileName = "cpabe/owner/encAesKey";
+		String PKFileName = "cpabe/ca/PKFile";
+		String MKFileName = "cpabe/ca/MKFile";
+		String SKFileName = "cpabe/user/SKFile";
 		String policy = "1 of (globalAttr)";
 		String[] attrs = new String[]{"globalAttr", "Rajas"};
 		//setup(PKFileName, MKFileName);

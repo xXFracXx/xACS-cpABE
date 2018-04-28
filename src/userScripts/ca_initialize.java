@@ -136,15 +136,15 @@ public class ca_initialize extends HttpServlet {
             
             // MK & PK Setup -
             
-            Path path = Paths.get("D:\\cpabe");
+            Path path = Paths.get("cpabe");
             Files.createDirectories(path);
             
-            path = Paths.get("D:\\cpabe/ca");
+            path = Paths.get("cpabe/ca");
             Files.createDirectories(path);
 
             
-    		String PKFileName = "D:\\cpabe/ca/PKFile";
-    		String MKFileName = "D:\\cpabe/ca/MKFile";
+    		String PKFileName = "cpabe/ca/PKFile";
+    		String MKFileName = "cpabe/ca/MKFile";
 
     		String[] keypairArr = new String[2];
             keypairArr = CPABE.setup(PKFileName, MKFileName);
@@ -158,10 +158,10 @@ public class ca_initialize extends HttpServlet {
             String mkey = keypairArr[1];
 
             try {
-                File file1=new File("D:\\cpabe/ca/PKFile");
+                File file1=new File("cpabe/ca/PKFile");
                 FileInputStream fis1=new FileInputStream(file1);
                 
-                File file2=new File("D:\\cpabe/ca/MKFile");
+                File file2=new File("cpabe/ca/MKFile");
                 FileInputStream fis2=new FileInputStream(file2);
                 
                 Class.forName("com.mysql.jdbc.Driver");

@@ -88,18 +88,18 @@ public class user_fileDownload extends HttpServlet {
 		// ResultSet rs = null;
 		String fileName = "";
 
-		if (new File("D:\\cpabe/user").exists()) {
-			File userFld = new File("D:\\cpabe/user");
+		if (new File("cpabe/user").exists()) {
+			File userFld = new File("cpabe/user");
 			FileUtils.deleteDirectory(userFld);
 		}
 		
-		Path path = Paths.get("D:\\cpabe");
+		Path path = Paths.get("cpabe");
 		Files.createDirectories(path);
 
-		path = Paths.get("D:\\cpabe/user");
+		path = Paths.get("cpabe/user");
 		Files.createDirectories(path);
 
-		path = Paths.get("D:\\cpabe/user/dl");
+		path = Paths.get("cpabe/user/dl");
 		Files.createDirectories(path);
 
 		//keyFix.fixKeyLength();
@@ -151,7 +151,7 @@ public class user_fileDownload extends HttpServlet {
 
 			System.out.println("Test2");
 
-			Scanner scanner = new Scanner(Paths.get("D:\\cpabe/user/encAesKeydec"));
+			Scanner scanner = new Scanner(Paths.get("cpabe/user/encAesKeydec"));
 			String content = scanner.useDelimiter("\\A").next();
 			scanner.close();
 
@@ -161,9 +161,9 @@ public class user_fileDownload extends HttpServlet {
 
 			System.out.println(aesKey);
 
-			File file2 = new File("D:\\cpabe/user/encFile.des");
-			File file3 = new File("D:\\cpabe/user/iv.enc");
-			File file4 = new File("D:\\cpabe/user/salt.enc");
+			File file2 = new File("cpabe/user/encFile.des");
+			File file3 = new File("cpabe/user/iv.enc");
+			File file4 = new File("cpabe/user/salt.enc");
 			FileOutputStream fos1 = new FileOutputStream(file2);
 			FileOutputStream fos2 = new FileOutputStream(file3);
 			FileOutputStream fos3 = new FileOutputStream(file4);
@@ -204,13 +204,13 @@ public class user_fileDownload extends HttpServlet {
 			fos2.close();
 			fos3.close();
 			
-			String ogFileName = "D:\\cpabe/user/dl/" + fileName;
+			String ogFileName = "cpabe/user/dl/" + fileName;
 
 			try {
 
-				String ivFileName = "D:\\cpabe/user/iv.enc";
-				String saltFileName = "D:\\cpabe/user/salt.enc";
-				String ciphertextFile = "D:\\cpabe/user/encFile.des";
+				String ivFileName = "cpabe/user/iv.enc";
+				String saltFileName = "cpabe/user/salt.enc";
+				String ciphertextFile = "cpabe/user/encFile.des";
 
 				String password = aesKey;
 

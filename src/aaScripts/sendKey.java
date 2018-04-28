@@ -101,13 +101,13 @@ public class sendKey {
 		
 		//System.out.println(SKstr);
 		
-        Path path = Paths.get("D:\\cpabe");
+        Path path = Paths.get("cpabe");
         Files.createDirectories(path);
         
-        path = Paths.get("D:\\cpabe/user");
+        path = Paths.get("cpabe/user");
         Files.createDirectories(path);
 
-		String SKFileName = "D:\\cpabe/user/SKFile";
+		String SKFileName = "cpabe/user/SKFile";
 		File SKFile = new File(SKFileName);
 		SerializeUtils.serialize(mSK, SKFile);
 
@@ -115,7 +115,7 @@ public class sendKey {
             Class.forName("com.mysql.jdbc.Driver");
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/xacs_db", "xacs", "xacspassword");
             
-            File file=new File("D:\\cpabe/user/encAesKey");
+            File file=new File("cpabe/user/encAesKey");
             FileOutputStream fos=new FileOutputStream(file);
             byte b[];
             Blob blob;
@@ -147,7 +147,7 @@ public class sendKey {
 //            rs = pstmt.executeQuery();
 // 
 //            // write binary stream into file
-//            File file = new File("D:\\cpabe/user/encAesKey");
+//            File file = new File("cpabe/user/encAesKey");
 //            fos1 = new FileOutputStream(file);
 // 
 //            System.out.println("Writing BLOB to file " + file.getAbsolutePath());
@@ -182,7 +182,7 @@ public class sendKey {
 //            }
 //        }
         
-        File file=new File("D:\\cpabe/user/PKFile");
+        File file=new File("cpabe/user/PKFile");
         FileOutputStream fos=new FileOutputStream(file);
 		
 		try{
@@ -209,7 +209,7 @@ public class sendKey {
     	fos.close();
 		
 
-        File file2=new File("D:\\cpabe/user/encAesKey");
+        File file2=new File("cpabe/user/encAesKey");
         FileOutputStream fos2=new FileOutputStream(file2);
     	
 		try{
@@ -237,8 +237,8 @@ public class sendKey {
 		
         fos2.close();
 		
-		String ciphertextFileName = "D:\\cpabe/user/encAesKey";
-		String PKFileName = "D:\\cpabe/user/PKFile";
+		String ciphertextFileName = "cpabe/user/encAesKey";
+		String PKFileName = "cpabe/user/PKFile";
 		return CPABE.dec(ciphertextFileName, PKFileName, SKFileName);
 	}
 }

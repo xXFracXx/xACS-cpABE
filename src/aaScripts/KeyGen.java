@@ -25,14 +25,14 @@ public class KeyGen {
 
 		System.out.println(uid);
 
-		Path path = Paths.get("D:\\cpabe");
+		Path path = Paths.get("cpabe");
 		Files.createDirectories(path);
 
-		path = Paths.get("D:\\cpabe/aa");
+		path = Paths.get("cpabe/aa");
 		Files.createDirectories(path);
 
 		Connection con = null;
-		String PKFileName = "D:\\cpabe/aa/PKFile";
+		String PKFileName = "cpabe/aa/PKFile";
 		File PKFile = new File(PKFileName);
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
@@ -58,7 +58,7 @@ public class KeyGen {
 			e.printStackTrace();
 		}
 
-		String MKFileName = "D:\\cpabe/aa/MKFile";
+		String MKFileName = "cpabe/aa/MKFile";
 		File MKFile = new File(MKFileName);
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
@@ -119,7 +119,7 @@ public class KeyGen {
 			ex.printStackTrace();
 		}
 
-		String SKFileName = "D:\\cpabe/aa/SKFile";
+		String SKFileName = "cpabe/aa/SKFile";
 		String[] attrs = new String[]{"globalAttr", uid, email, state, country };
 		System.out.println(attrs[0] + " " + attrs[1] + " " + attrs[2] + " " + attrs[3]);
 		

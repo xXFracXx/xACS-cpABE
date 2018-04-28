@@ -39,11 +39,11 @@ public class CPABE {
 	public static void main(String[] args) throws IOException {
 		CPABEImpl.debug = true;
 
-		String encFileName = "D:\\cpabe/image.jpg";
-		String ciphertextFileName = "D:\\cpabe/owner/encFile";
-		String PKFileName = "D:\\cpabe/ca/PKFile";
-		String MKFileName = "D:\\cpabe/ca/MKFile";
-		String SKFileName = "D:\\cpabe/user/SKFileNEW";
+		String encFileName = "cpabe/image.jpg";
+		String ciphertextFileName = "cpabe/owner/encFile";
+		String PKFileName = "cpabe/ca/PKFile";
+		String MKFileName = "cpabe/ca/MKFile";
+		String SKFileName = "cpabe/user/SKFileNEW";
 		String policy = "1 of (Rajas)";
 		String[] attrs = new String[] { "Rajas", "mail", "KA", "India" };
 
