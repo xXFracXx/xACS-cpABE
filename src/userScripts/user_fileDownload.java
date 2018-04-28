@@ -2,7 +2,6 @@ package userScripts;
 
 import DBcon.DbConnection;
 import aaScripts.sendKey;
-import xacs.keyFix;
 
 import java.io.File;
 import java.io.FileInputStream;

@@ -244,7 +244,7 @@
                         <!--<h1 class="g-font-weight-300 g-font-size-28 g-color-black g-mb-30">User Details</h1>-->
                         <div class="media-md align-items-center g-mb-30">
                             <div class="d-flex g-mb-15 g-mb-0--md">
-                                <h1 class="g-font-weight-500 g-font-size-28 g-color-black">Authorized Users & AAs</h1>
+                                <h1 class="g-font-weight-500 g-font-size-28 g-color-black">Authorized Users &amp; AAs</h1>
                             </div>
 
                             <div class="media d-md-flex align-items-center ml-auto">

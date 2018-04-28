@@ -66,7 +66,6 @@ import algo.encryption;
 import cn.edu.pku.ss.crypto.abe.PublicKey;
 import cn.edu.pku.ss.crypto.abe.api.CPABE;
 import cn.edu.pku.ss.crypto.abe.serialize.SerializeUtils;
-import xacs.keyFix;
 
 /**
  * Servlet implementation class Upload
