@@ -1,0 +1,1 @@
+web: sh target/WebContent
