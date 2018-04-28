@@ -36,7 +36,7 @@ public class KeyGen {
 		File PKFile = new File(PKFileName);
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			con = DriverManager.getConnection("jdbc:mysql://localhost:3306/xacs_db", "xacs", "xacspassword");
+			con = DriverManager.getConnection("jdbc:mysql://us-cdbr-iron-east-05.cleardb.net/heroku_925e3cb61718614", "b45ac8d6e3ff55", "57d84b63");
 
 			FileOutputStream fos = new FileOutputStream(PKFile);
 			byte b1[];
@@ -62,7 +62,7 @@ public class KeyGen {
 		File MKFile = new File(MKFileName);
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			con = DriverManager.getConnection("jdbc:mysql://localhost:3306/xacs_db", "xacs", "xacspassword");
+			con = DriverManager.getConnection("jdbc:mysql://us-cdbr-iron-east-05.cleardb.net/heroku_925e3cb61718614", "b45ac8d6e3ff55", "57d84b63");
 
 			FileOutputStream fos = new FileOutputStream(MKFile);
 			byte b1[];
@@ -90,7 +90,7 @@ public class KeyGen {
 		String email = "null", country = "null", state = "null";
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			con = DriverManager.getConnection("jdbc:mysql://localhost:3306/xacs_db", "xacs", "xacspassword");
+			con = DriverManager.getConnection("jdbc:mysql://us-cdbr-iron-east-05.cleardb.net/heroku_925e3cb61718614", "b45ac8d6e3ff55", "57d84b63");
 			st = con.createStatement();
 			rs = st.executeQuery("select * from reg where audd = '" + uid + "'");
 			while (rs.next()) {
@@ -108,7 +108,7 @@ public class KeyGen {
 		int n = 0, t = 0;
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			con = DriverManager.getConnection("jdbc:mysql://localhost:3306/xacs_db", "xacs", "xacspassword");
+			con = DriverManager.getConnection("jdbc:mysql://us-cdbr-iron-east-05.cleardb.net/heroku_925e3cb61718614", "b45ac8d6e3ff55", "57d84b63");
 			st = con.createStatement();
 			rs = st.executeQuery("select * from acs_info where id = 1");
 			while (rs.next()) {
@@ -144,7 +144,7 @@ public class KeyGen {
 			subShare = gson.toJson(shares.get(i));
 			try {
 				Class.forName("com.mysql.jdbc.Driver");
-				con = DriverManager.getConnection("jdbc:mysql://localhost:3306/xacs_aa", "xacs", "xacspassword");
+				con = DriverManager.getConnection("jdbc:mysql://us-cdbr-iron-east-05.cleardb.net/heroku_925e3cb61718614", "b45ac8d6e3ff55", "57d84b63");
 				st = con.createStatement();
 				st.executeUpdate("INSERT INTO " + aaArr[i] + " (UID, subShare) values ('" + uid + "', '" + subShare + "')");
 			} catch (Exception ex) {

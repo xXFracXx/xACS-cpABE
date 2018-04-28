@@ -49,9 +49,10 @@ public class ca_activate extends HttpServlet {
 		// TODO Auto-generated method stub
 		response.getWriter().append("Served at: ").append(request.getContextPath());
 		HttpSession session = request.getSession();
-		String url = "jdbc:mysql://localhost:3306/xacs_db";
-		String user = "xacs";
-		String password = "xacspassword";
+		//"jdbc:mysql://us-cdbr-iron-east-05.cleardb.net/heroku_925e3cb61718614", "b45ac8d6e3ff55", "57d84b63"
+		String url = "jdbc:mysql://us-cdbr-iron-east-05.cleardb.net/heroku_925e3cb61718614";
+		String user = "b45ac8d6e3ff55";
+		String password = "57d84b63";
 		int id = Integer.parseInt(request.getParameter("id"));
 		try {
 			Connection conn = DriverManager.getConnection(url, user, password);

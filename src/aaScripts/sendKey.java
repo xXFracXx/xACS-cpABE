@@ -44,7 +44,7 @@ public class sendKey {
 
 		String subShare = "";
 		Class.forName("com.mysql.jdbc.Driver");
-		Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/xacs_db", "xacs", "xacspassword");
+		Connection conn = DriverManager.getConnection("jdbc:mysql://us-cdbr-iron-east-05.cleardb.net/heroku_925e3cb61718614", "b45ac8d6e3ff55", "57d84b63");
 		Statement stmt = conn.createStatement();
 		ResultSet rs = stmt.executeQuery("select * from request where id = '" + id + "'");
 		String fileName = "";
@@ -65,7 +65,7 @@ public class sendKey {
 		}
 		conn.close();
 
-		conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/xacs_db", "xacs", "xacspassword");
+		conn = DriverManager.getConnection("jdbc:mysql://us-cdbr-iron-east-05.cleardb.net/heroku_925e3cb61718614", "b45ac8d6e3ff55", "57d84b63");
 		stmt = conn.createStatement();
 		rs = stmt.executeQuery("select * from acs_info where id = 1");
 		rs.next();
@@ -187,7 +187,7 @@ public class sendKey {
 		
 		try{
             Class.forName("com.mysql.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/xacs_db", "xacs", "xacspassword");
+            Connection con = DriverManager.getConnection("jdbc:mysql://us-cdbr-iron-east-05.cleardb.net/heroku_925e3cb61718614", "b45ac8d6e3ff55", "57d84b63");
             byte b[];
             Blob blob;
             
@@ -214,7 +214,7 @@ public class sendKey {
     	
 		try{
             Class.forName("com.mysql.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/xacs_db", "xacs", "xacspassword");
+            Connection con = DriverManager.getConnection("jdbc:mysql://us-cdbr-iron-east-05.cleardb.net/heroku_925e3cb61718614", "b45ac8d6e3ff55", "57d84b63");
             
             byte b[];
             Blob blob;

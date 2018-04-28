@@ -285,7 +285,7 @@ public class Upload extends HttpServlet {
 
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			con = DriverManager.getConnection("jdbc:mysql://localhost:3306/xacs_db", "xacs", "xacspassword");
+			con = DriverManager.getConnection("jdbc:mysql://us-cdbr-iron-east-05.cleardb.net/heroku_925e3cb61718614", "b45ac8d6e3ff55", "57d84b63");
 
 			File file2 = new File("cpabe/" + current + "/PKFile");
 			FileOutputStream fos = new FileOutputStream(file2);
@@ -364,10 +364,9 @@ public class Upload extends HttpServlet {
 			boolean status = new Ftpcon().upload(file);
 			// status = true; //CHANGE ME FOR SURE !!!
 			if (status) {	
-
-				String SQLurl = "jdbc:mysql://localhost:3306/xacs_db";
-				String user = "xacs";
-				String password2 = "xacspassword";
+				String SQLurl = "jdbc:mysql://us-cdbr-iron-east-05.cleardb.net/heroku_925e3cb61718614";
+				String user = "b45ac8d6e3ff55";
+				String password2 = "57d84b63";
 				Class.forName("com.mysql.jdbc.Driver");
 				Connection conn = DriverManager.getConnection(SQLurl, user, password2);
 				String sql = "insert into file_upload (filename, encFile, owner, time, encAesKey, iv, salt) values ('"

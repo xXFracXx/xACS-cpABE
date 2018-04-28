@@ -41,7 +41,7 @@ public class owner_fileDelete extends HttpServlet {
         try {
         	
         	Class.forName("com.mysql.jdbc.Driver");
-			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/xacs_aa", "xacs", "xacspassword");
+			Connection con = DriverManager.getConnection("jdbc:mysql://us-cdbr-iron-east-05.cleardb.net/heroku_925e3cb61718614", "b45ac8d6e3ff55", "57d84b63");
 			Statement st = con.createStatement();
 			
 			st.executeUpdate("TRUNCATE TABLE aalist");
@@ -54,7 +54,7 @@ public class owner_fileDelete extends HttpServlet {
             	fname = rs.getString("filename");
             }
         	
-            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/xacs_aa", "xacs", "xacspassword");
+            con = DriverManager.getConnection("jdbc:mysql://us-cdbr-iron-east-05.cleardb.net/heroku_925e3cb61718614", "b45ac8d6e3ff55", "57d84b63");
 			st = con.createStatement();
         	String[] aaArr = new String[]{"aa1reqs", "aa2reqs", "aa3reqs", "aa4reqs", "aa5reqs", "aa6reqs", "aa7reqs", "aa8reqs", "aa9reqs", "aa10reqs"};
 			int n = aaArr.length;

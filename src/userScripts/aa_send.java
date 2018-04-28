@@ -60,7 +60,7 @@ public class aa_send extends HttpServlet {
 			String aaNum = "";
 			try {
 				Class.forName("com.mysql.jdbc.Driver");
-				con = DriverManager.getConnection("jdbc:mysql://localhost:3306/xacs_aa", "xacs", "xacspassword");
+				con = DriverManager.getConnection("jdbc:mysql://us-cdbr-iron-east-05.cleardb.net/heroku_925e3cb61718614", "b45ac8d6e3ff55", "57d84b63");
 				st = con.createStatement();
 				rs = st.executeQuery("select * from aalist where AID = '" + user_id + "'");
 				while (rs.next()) {
@@ -75,7 +75,7 @@ public class aa_send extends HttpServlet {
 
 			try {
 
-				conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/xacs_db", "xacs", "xacspassword");
+				conn = DriverManager.getConnection("jdbc:mysql://us-cdbr-iron-east-05.cleardb.net/heroku_925e3cb61718614", "b45ac8d6e3ff55", "57d84b63");
 				stmt = conn.createStatement();
 				rs = stmt.executeQuery("select * from request where id = '" + id + "'");
 				if (rs.next()) {
@@ -86,7 +86,7 @@ public class aa_send extends HttpServlet {
 
 					int currCount = aCount + 1;
 
-					conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/xacs_db", "xacs", "xacspassword");
+					conn = DriverManager.getConnection("jdbc:mysql://us-cdbr-iron-east-05.cleardb.net/heroku_925e3cb61718614", "b45ac8d6e3ff55", "57d84b63");
 					stmt = conn.createStatement();
 					rs = stmt.executeQuery("select * from acs_info where id = 1");
 					rs.next();
@@ -97,7 +97,7 @@ public class aa_send extends HttpServlet {
 					String[] aaArr = new String[] { "aa1Share", "aa2Share", "aa3Share", "aa4Share", "aa5Share",
 							"aa6Share", "aa7Share", "aa8Share", "aa9Share", "aa10Share" };
 
-					con = DriverManager.getConnection("jdbc:mysql://localhost:3306/xacs_aa", "xacs", "xacspassword");
+					con = DriverManager.getConnection("jdbc:mysql://us-cdbr-iron-east-05.cleardb.net/heroku_925e3cb61718614", "b45ac8d6e3ff55", "57d84b63");
 					st = con.createStatement();
 					int i = st.executeUpdate("update " + aaRTable + " set status = 'Yes' where id = '" + id + "'");
 					if (i == 0) {
@@ -107,7 +107,7 @@ public class aa_send extends HttpServlet {
 					con.close();
 
 					String uid = "";
-					conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/xacs_db", "xacs", "xacspassword");
+					conn = DriverManager.getConnection("jdbc:mysql://us-cdbr-iron-east-05.cleardb.net/heroku_925e3cb61718614", "b45ac8d6e3ff55", "57d84b63");
 					stmt = conn.createStatement();
 					rs = stmt.executeQuery("select audd from reg where name = '" + name + "'");
 					while (rs.next()) {
@@ -116,7 +116,7 @@ public class aa_send extends HttpServlet {
 					conn.close();
 
 					String subShare = "";
-					conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/xacs_aa", "xacs", "xacspassword");
+					conn = DriverManager.getConnection("jdbc:mysql://us-cdbr-iron-east-05.cleardb.net/heroku_925e3cb61718614", "b45ac8d6e3ff55", "57d84b63");
 					stmt = conn.createStatement();
 					rs = stmt.executeQuery("select subShare from " + aaSTable + " where UID = '" + uid + "'");
 					while (rs.next()) {

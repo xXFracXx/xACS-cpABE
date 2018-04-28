@@ -467,7 +467,7 @@
 									String aaNum = "";
 									try {
 										Class.forName("com.mysql.jdbc.Driver");
-										con = DriverManager.getConnection("jdbc:mysql://localhost:3306/xacs_aa", "xacs", "xacspassword");
+										con = DriverManager.getConnection("jdbc:mysql://us-cdbr-iron-east-05.cleardb.net/heroku_925e3cb61718614", "b45ac8d6e3ff55", "57d84b63");
 										st = con.createStatement();
 										rs = st.executeQuery("select * from aalist where AID = '"+user_id+"'");
 										while (rs.next()) {
@@ -482,8 +482,7 @@
 
 									try {
 										Class.forName("com.mysql.jdbc.Driver");
-										Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/xacs_aa", "xacs",
-												"xacspassword");
+										Connection conn = DriverManager.getConnection("jdbc:mysql://us-cdbr-iron-east-05.cleardb.net/heroku_925e3cb61718614", "b45ac8d6e3ff55", "57d84b63");
 										st = conn.createStatement();
 										rs = st.executeQuery("select * from " + aaTable + " WHERE status = 'No'");
 										while (rs.next()) {

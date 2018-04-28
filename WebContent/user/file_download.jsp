@@ -403,7 +403,7 @@ div.disabled:hover {
 									</th>
 
 									<%
-										con = DriverManager.getConnection("jdbc:mysql://localhost:3306/xacs_db", "xacs", "xacspassword");
+										con = DriverManager.getConnection("jdbc:mysql://us-cdbr-iron-east-05.cleardb.net/heroku_925e3cb61718614", "b45ac8d6e3ff55", "57d84b63");
 										st = con.createStatement();
 										rs = st.executeQuery("select * from acs_info where id = 1");
 										rs.next();
@@ -454,8 +454,7 @@ div.disabled:hover {
 									String subShare = "";
 									try {
 										Class.forName("com.mysql.jdbc.Driver");
-										Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/xacs_db", "xacs",
-												"xacspassword");
+										Connection conn = DriverManager.getConnection("jdbc:mysql://us-cdbr-iron-east-05.cleardb.net/heroku_925e3cb61718614", "b45ac8d6e3ff55", "57d84b63");
 										Statement stmt = conn.createStatement();
 										rs = stmt.executeQuery("select * from request where name = '" + session.getAttribute("usr_name") + "'");
 										while (rs.next()) {

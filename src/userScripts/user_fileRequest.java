@@ -45,7 +45,7 @@ public class user_fileRequest extends HttpServlet {
             String id = request.getParameter("id");
             System.out.println("ID >>--->>:" + id);
 			Class.forName("com.mysql.jdbc.Driver");
-            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/xacs_db", "xacs", "xacspassword");
+            conn = DriverManager.getConnection("jdbc:mysql://us-cdbr-iron-east-05.cleardb.net/heroku_925e3cb61718614", "b45ac8d6e3ff55", "57d84b63");
             stmt = conn.createStatement();
             rs = stmt.executeQuery("select * from file_upload where id = '" + id + "'");
             if (rs.next()) {
@@ -86,7 +86,7 @@ public class user_fileRequest extends HttpServlet {
                 int n = 0, t = 0;
         		try {
     				Class.forName("com.mysql.jdbc.Driver");
-        			con = DriverManager.getConnection("jdbc:mysql://localhost:3306/xacs_db", "xacs", "xacspassword");
+        			con = DriverManager.getConnection("jdbc:mysql://us-cdbr-iron-east-05.cleardb.net/heroku_925e3cb61718614", "b45ac8d6e3ff55", "57d84b63");
         			st = con.createStatement();
         			rs = st.executeQuery("select * from acs_info where id = 1");
         			while (rs.next()) {
@@ -102,7 +102,7 @@ public class user_fileRequest extends HttpServlet {
         		for(int i = 0; i < n; i++) {
         			try {
         				Class.forName("com.mysql.jdbc.Driver");
-        				con = DriverManager.getConnection("jdbc:mysql://localhost:3306/xacs_aa", "xacs", "xacspassword");
+        				con = DriverManager.getConnection("jdbc:mysql://us-cdbr-iron-east-05.cleardb.net/heroku_925e3cb61718614", "b45ac8d6e3ff55", "57d84b63");
         				st = con.createStatement();
                         sql = "insert into " + aaArr[i] + " (id, name, mail, state, country, fname, status) values ('" + colCount + "','" + Cname + "','" + Cmail + "','" + State + "','" + Country + "','" + fname + "','" + Status + "')";
         				ck = st.executeUpdate(sql);
