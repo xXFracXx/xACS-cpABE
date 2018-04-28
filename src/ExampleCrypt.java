@@ -49,6 +49,10 @@ public class ExampleCrypt {
 	String cleartextAgainFile = "new.pdf";
 
 	cipher.init(Cipher.DECRYPT_MODE, secKey);
+	
+	for(int i2 = 0; i2 < 8; i2++)
+	System.out.println(block[i2]);
+	System.out.println(i);
 
 	fis = new FileInputStream(ciphertextFile);
 	CipherInputStream cis = new CipherInputStream(fis, cipher);

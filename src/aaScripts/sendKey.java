@@ -141,53 +141,53 @@ public class sendKey {
         conn = null;
         PreparedStatement pstmt = null;
  
-        try {
-            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/xacs_db", "xacs", "xacspassword");
-            pstmt = conn.prepareStatement(selectSQL);
-            rs = pstmt.executeQuery();
- 
-            // write binary stream into file
-            File file = new File("D:\\cpabe/user/encAesKey");
-            fos1 = new FileOutputStream(file);
- 
-            System.out.println("Writing BLOB to file " + file.getAbsolutePath());
-            while (rs.next()) {
-                InputStream input = rs.getBinaryStream("encAesKey");
-                byte[] buffer = new byte[1024];
-                while (input.read(buffer) > 0) {
-                    fos1.write(buffer);
-                }
-            }
-            fos1.close();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        } finally {
-            try {
-                if (rs != null) {
-                    rs.close();
-                }
-                if (pstmt != null) {
-                    pstmt.close();
-                }
- 
-                if (conn != null) {
-                    conn.close();
-                }
-                if (fos1 != null) {
-                    fos1.close();
-                }
- 
-            } catch (IOException e) {
-                System.out.println(e.getMessage());
-            }
-        }
+//        try {
+//            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/xacs_db", "xacs", "xacspassword");
+//            pstmt = conn.prepareStatement(selectSQL);
+//            rs = pstmt.executeQuery();
+// 
+//            // write binary stream into file
+//            File file = new File("D:\\cpabe/user/encAesKey");
+//            fos1 = new FileOutputStream(file);
+// 
+//            System.out.println("Writing BLOB to file " + file.getAbsolutePath());
+//            while (rs.next()) {
+//                InputStream input = rs.getBinaryStream("encAesKey");
+//                byte[] buffer = new byte[1024];
+//                while (input.read(buffer) > 0) {
+//                    fos1.write(buffer);
+//                }
+//            }
+//            fos1.close();
+//        } catch (SQLException e) {
+//            System.out.println(e.getMessage());
+//        } finally {
+//            try {
+//                if (rs != null) {
+//                    rs.close();
+//                }
+//                if (pstmt != null) {
+//                    pstmt.close();
+//                }
+// 
+//                if (conn != null) {
+//                    conn.close();
+//                }
+//                if (fos1 != null) {
+//                    fos1.close();
+//                }
+// 
+//            } catch (IOException e) {
+//                System.out.println(e.getMessage());
+//            }
+//        }
+        
+        File file=new File("D:\\cpabe/user/PKFile");
+        FileOutputStream fos=new FileOutputStream(file);
 		
 		try{
             Class.forName("com.mysql.jdbc.Driver");
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/xacs_db", "xacs", "xacspassword");
-            
-            File file=new File("D:\\cpabe/user/PKFile");
-            FileOutputStream fos=new FileOutputStream(file);
             byte b[];
             Blob blob;
             
@@ -200,18 +200,22 @@ public class sendKey {
             }
             
             ps.close();
-            fos.close();
+            //fos.close();
             con.close();
         }catch(Exception e){
             e.printStackTrace();
         }
+
+    	fos.close();
 		
+
+        File file2=new File("D:\\cpabe/user/encAesKey");
+        FileOutputStream fos2=new FileOutputStream(file2);
+    	
 		try{
             Class.forName("com.mysql.jdbc.Driver");
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/xacs_db", "xacs", "xacspassword");
             
-            File file=new File("D:\\cpabe/user/encAesKey");
-            FileOutputStream fos=new FileOutputStream(file);
             byte b[];
             Blob blob;
             
@@ -222,15 +226,16 @@ public class sendKey {
             while(rs.next()){
                 blob=rs.getBlob("encAesKey");
                 b=blob.getBytes(1,(int)blob.length());
-                fos.write(b);
+                fos2.write(b);
             }
             
             ps.close();
-            fos.close();
             con.close();
         }catch(Exception e){
             e.printStackTrace();
         }
+		
+        fos2.close();
 		
 		String ciphertextFileName = "D:\\cpabe/user/encAesKey";
 		String PKFileName = "D:\\cpabe/user/PKFile";

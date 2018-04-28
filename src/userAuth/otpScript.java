@@ -114,7 +114,7 @@ public class otpScript extends HttpServlet {
 
         session.setAttribute("otp", otpmsg);
         
-        boolean otpTest = false;
+        boolean otpTest = true;
 
         if (otpTest) {
 

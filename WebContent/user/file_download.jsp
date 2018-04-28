@@ -313,7 +313,7 @@ div.disabled:hover {
 						<span aria-hidden="true">×</span>
 					</button>
 					<h4 class="h5">
-						<i class="fa fa-minus-circle"></i> Download Failed! 
+						<i class="fa fa-minus-circle"></i> Download Failed!
 					</h4>
 					Policy not satisfied! Attributes dont match.
 				</div>
@@ -330,6 +330,30 @@ div.disabled:hover {
 						Server!
 					</h4>
 					<!--Change a few things up and try submitting again.-->
+				</div>
+
+				<!--<h1 class="g-font-weight-300 g-font-size-28 g-color-black g-mb-30">User Details</h1>-->
+				<div class="media-md align-items-center g-mb-30">
+					<div class="d-flex g-mb-15 g-mb-0--md">
+						<h1 class="g-font-weight-500 g-font-size-28 g-color-black">Download
+							File</h1>
+					</div>
+
+					<div class="media d-md-flex align-items-center ml-auto">
+
+						<div class="d-flex g-ml-15 g-ml-55--md">
+							<div class="input-group g-pos-rel g-width-320--md">
+								<input id="datatableSearch1"
+									class="form-control g-font-size-default g-brd-gray-light-v7 g-brd-lightblue-v3--focus g-rounded-20 g-pl-20 g-pr-50 g-py-10"
+									type="text" placeholder="Search">
+								<button
+									class="btn g-pos-abs g-top-0 g-right-0 g-z-index-2 g-width-60 h-100 g-bg-transparent g-font-size-16 g-color-lightred-v2 g-color-lightblue-v3--hover rounded-0"
+									type="submit">
+									<i class="hs-admin-search g-absolute-centered"></i>
+								</button>
+							</div>
+						</div>
+					</div>
 				</div>
 
 				<div class="g-mb-40">
@@ -433,10 +457,9 @@ div.disabled:hover {
 										Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/xacs_db", "xacs",
 												"xacspassword");
 										Statement stmt = conn.createStatement();
-										rs = stmt.executeQuery("select * from request where name = '" + session.getAttribute("usr_name")
-												+ "'");
+										rs = stmt.executeQuery("select * from request where name = '" + session.getAttribute("usr_name") + "'");
 										while (rs.next()) {
-											
+
 											int id = rs.getInt("id");
 											int aaCount = Integer.parseInt(rs.getString("aCount"));
 											subSArr = new String[aaCount];
@@ -576,7 +599,8 @@ div.disabled:hover {
 											<div class="media-body align-self-center" href="#!">
 												<a
 													class="u-tags-v1 text-center g-brd-lightbrown g-bg-lightbrown g-width-140 g-color-white g-brd-around g-rounded-50 g-py-4 g-px-15 unclickable"
-													href="" style="font-weight: bolder;" onclick="return false;">AA Auth Pending</a>
+													href="" style="font-weight: bolder;"
+													onclick="return false;">AA Auth Pending</a>
 											</div>
 										</div>
 									</td>

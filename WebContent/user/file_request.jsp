@@ -463,7 +463,7 @@
                                                 </div>
 
                                                 <p class="g-font-weight-300 g-font-size-default g-color-gray-dark-v6 mb-10"><%=rs.getString("time")%> <strong>•</strong> <%=size_stirng%></p>
-                                                <div class="media g-pos-rel g-bg-lightblue-v6 g-color-gray-dark-v6 g-rounded-10 g-pa-10-15">
+                                                <!-- <div class="media g-pos-rel g-bg-lightblue-v6 g-color-gray-dark-v6 g-rounded-10 g-pa-10-15">
                                                     <div class="d-flex align-self-center">
                                                         <i class="hs-admin-key g-font-size-20 g-color-lightblue-v4"></i>
                                                     </div>
@@ -473,7 +473,7 @@
                                                             <small>view key</small>
                                                         </span>
                                                     </div>
-                                                </div>
+                                                </div> -->
                                             </footer>
                                         </div>
                                     </div>

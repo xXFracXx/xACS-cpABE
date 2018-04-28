@@ -11,38 +11,13 @@ import org.jsecretsharing.Share;
 import org.jsecretsharing.ShareBuilder;
 
 import com.google.gson.Gson;
-import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
-
-import DBcon.DbConnection;
-import cn.edu.pku.ss.crypto.abe.MasterKey;
-import cn.edu.pku.ss.crypto.abe.PublicKey;
 import cn.edu.pku.ss.crypto.abe.SecretKey;
-import cn.edu.pku.ss.crypto.abe.api.*;
-import cn.edu.pku.ss.crypto.abe.serialize.SerializeUtils;
-
 import cn.edu.pku.ss.crypto.abe.api.*;
 import cn.edu.pku.ss.crypto.abe.serialize.SerializeUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.lang.reflect.Type;
-import java.security.SecureRandom;
 import java.util.*;
-
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.codehaus.jettison.json.JSONArray;
-import org.codehaus.jettison.json.JSONException;
-import org.codehaus.jettison.json.JSONObject;
-import org.jsecretsharing.*;
-
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 public class KeyGen {
 
